@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Assistente Inteligente - Controle por Voz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            padding-left: 12px;
+        }
+
+        .mic-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .mic-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mic-btn:active {
+            transform: scale(0.95);
+        }
+
+        .mic-btn.ouvindo {
+            background: linear-gradient(135deg, #f44336, #e91e63);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(244, 67, 54, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+        }
+
+        .mic-icon {
+            font-size: 3em;
+            color: white;
+        }
+
+        .status-text {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .command-display {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .command-display p {
+            margin: 5px 0;
+        }
+
+        .command-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .audio-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .audio-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .audio-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .audio-btn:active {
+            transform: translateY(0);
+        }
+
+        .audio-btn.audio1 { background: #4CAF50; color: white; }
+        .audio-btn.audio2 { background: #2196F3; color: white; }
+        .audio-btn.audio3 { background: #FF9800; color: white; }
+        .audio-btn.audio4 { background: #9C27B0; color: white; }
+        .audio-btn.audio5 { background: #f44336; color: white; }
+        .audio-btn.audio6 { background: #607D8B; color: white; }
+
+        .rele-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .rele-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .rele-btn.ligar {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .rele-btn.desligar {
+            background: #f44336;
+            color: white;
+        }
+
+        .rele-btn:hover {
+            transform: scale(0.98);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .status-badge.ligado {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-badge.desligado {
+            background: #f44336;
+            color: white;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sequence-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .sequence-btn:hover {
+            transform: scale(0.98);
+        }
+
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            color: #1565C0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Assistente Inteligente</h1>
+        <p class="subtitle">Controle por Voz · Gemini Voice</p>
+
+        <!-- Botão do microfone -->
+        <div class="card">
+            <div class="mic-container">
+                <button class="mic-btn" id="micBtn">
+                    <div class="mic-icon">🎤</div>
+                </button>
+                <div class="status-text" id="statusText">Clique no microfone e fale</div>
+            </div>
+
+            <!-- Último comando reconhecido -->
+            <div class="command-display" id="commandDisplay" style="display: none;">
+                <p>📝 Último comando:</p>
+                <p class="command-text" id="commandText">-</p>
+            </div>
+        </div>
+
+        <!-- Botões dos áudios gravados -->
+        <div class="card">
+            <h3>🎵 Áudios Gravados (ElevenLabs)</h3>
+            <div class="audio-buttons">
+                <button class="audio-btn audio1" onclick="tocarAudio('Audio1.mp3')">🎧 Áudio 1<br><small>Boas-vindas</small></button>
+                <button class="audio-btn audio2" onclick="tocarAudio('Audio2.mp3')">🎧 Áudio 2<br><small>Compreendi</small></button>
+                <button class="audio-btn audio3" onclick="tocarAudio('Audio3.mp3')">🎧 Áudio 3<br><small>Luz Ligada</small></button>
+                <button class="audio-btn audio4" onclick="tocarAudio('Audio4.mp3')">🎧 Áudio 4<br><small>Luz Desligada</small></button>
+                <button class="audio-btn audio5" onclick="tocarAudio('Audio5.mp3')">🎧 Áudio 5<br><small>Não Entendi</small></button>
+                <button class="audio-btn audio6" onclick="tocarAudio('Audio6.mp3')">🎧 Áudio 6<br><small>Despedida</small></button>
+            </div>
+            <div class="info-box">
+                📁 Coloque os arquivos Audio1.mp3 até Audio6.mp3 na mesma pasta que este HTML
+            </div>
+        </div>
+
+        <!-- Controle do relé -->
+        <div class="card">
+            <h3>🔌 Controle do Relé</h3>
+            <div class="status-row">
+                <span>Status atual:</span>
+                <span id="releStatus" class="status-badge desligado">DESLIGADO</span>
+            </div>
+            <div class="rele-buttons">
+                <button class="rele-btn ligar" onclick="controlarRele('ligar')">🔴 LIGAR</button>
+                <button class="rele-btn desligar" onclick="controlarRele('desligar')">⚫ DESLIGAR</button>
+            </div>
+        </div>
+
+        <!-- Sequência automática -->
+        <div class="card">
+            <h3>🎭 Demonstração Completa</h3>
+            <p>Teste toda a interação com um clique:</p>
+            <button class="sequence-btn" onclick="executarSequencia()">▶️ Executar Saudação + Relé + Despedida</button>
+        </div>
+    </div>
+
+    <div class="feedback" id="feedback">✅</div>
+
+    <script>
+        // ========= CONFIGURAÇÕES =========
+        // Substitua pelo IP do seu ESP32 quando estiver no ar
+        const ESP32_IP = "192.168.1.100";  // ⚠️ MUDE PARA O IP DO SEU ESP32
+        
+        // URLs das APIs do ESP32
+        const API_PLAY = `http://${ESP32_IP}/play`;
+        const API_RELE = `http://${ESP32_IP}/rele`;
+        
+        // ========= VARIÁVEIS GLOBAIS =========
+        let recognition = null;
+        let estaOuvindo = false;
+        let releStatus = false;  // false = desligado, true = ligado
+        
+        // ========= INICIALIZAÇÃO =========
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarReconhecimentoVoz();
+            atualizarStatusRele();
+            mostrarFeedback("Sistema pronto! Clique no microfone.");
+        });
+        
+        // ========= RECONHECIMENTO DE VOZ (GEMINI / WEB SPEECH API) =========
+        function inicializarReconhecimentoVoz() {
+            // Verifica se o navegador suporta a Web Speech API
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                mostrarFeedback("❌ Seu navegador não suporta reconhecimento de voz.");
+                document.getElementById('statusText').innerText = "Navegador não suporta";
+                return;
+            }
+            
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            
+            recognition.lang = 'pt-BR';           // Português do Brasil
+            recognition.continuous = false;       // Para após um comando
+            recognition.interimResults = false;    // Só resultados finais
+            recognition.maxAlternatives = 1;
+            
+            recognition.onstart = function() {
+                estaOuvindo = true;
+                document.getElementById('micBtn').classList.add('ouvindo');
+                document.getElementById('statusText').innerText = "🎙️ Ouvindo... Fale o comando";
+                mostrarFeedback("Ouvindo...");
+            };
+            
+            recognition.onend = function() {
+                estaOuvindo = false;
+                document.getElementById('micBtn').classList.remove('ouvindo');
+                document.getElementById('statusText').innerText = "Clique no microfone e fale";
+            };
+            
+            recognition.onresult = function(event) {
+                const comando = event.results[0][0].transcript.toLowerCase().trim();
+                console.log("Comando reconhecido:", comando);
+                
+                // Mostra o comando na tela
+                document.getElementById('commandDisplay').style.display = 'block';
+                document.getElementById('commandText').innerHTML = comando;
+                
+                // Processa o comando
+                processarComandoVoz(comando);
+            };
+            
+            recognition.onerror = function(event) {
+                console.error("Erro no reconhecimento:", event.error);
+                mostrarFeedback(`❌ Erro: ${event.error}`);
+                document.getElementById('statusText').innerText = "Erro. Tente novamente.";
+            };
+        }
+        
+        function iniciarEscuta() {
+            if (!recognition) {
+                mostrarFeedback("Reconhecimento de voz não disponível");
+                return;
+            }
+            
+            if (estaOuvindo) {
+                recognition.stop();
+            }
+            
+            try {
+                recognition.start();
+            } catch(e) {
+                console.log("Já está rodando ou erro:", e);
+            }
+        }
+        
+        // Botão do microfone
+        document.getElementById('micBtn').addEventListener('click', function() {
+            iniciarEscuta();
+        });
+        
+        // ========= PROCESSAR COMANDOS DE VOZ =========
+        function processarComandoVoz(comando) {
+            mostrarFeedback(`🎤 Você disse: "${comando}"`);
+            
+            // Mapeamento de palavras-chave para ações
+            if (comando.includes("bem vindo") || comando.includes("olá") || comando.includes("oi")) {
+                tocarAudio('Audio1.mp3');
+                mostrarFeedback("👋 Reproduzindo boas-vindas");
+            }
+            else if (comando.includes("ligar luz") || comando.includes("acender") || comando.includes("liga a luz") || comando.includes("ligue a luz")) {
+                controlarRele('ligar');
+                setTimeout(() => tocarAudio('Audio3.mp3'), 500);
+                mostrarFeedback("💡 Ligando luz...");
+            }
+            else if (comando.includes("desligar luz") || comando.includes("apagar") || comando.includes("desliga a luz") || comando.includes("desligue a luz")) {
+                controlarRele('desligar');
+                setTimeout(() => tocarAudio('Audio4.mp3'), 500);
+                mostrarFeedback("🌙 Desligando luz...");
+            }
+            else if (comando.includes("obrigado") || comando.includes("valeu") || comando.includes("tchau") || comando.includes("até logo")) {
+                tocarAudio('Audio6.mp3');
+                mostrarFeedback("👋 Até logo!");
+            }
+            else if (comando.includes("como você está") || comando.includes("tudo bem") || comando.includes("beleza")) {
+                tocarAudio('Audio2.mp3');
+                mostrarFeedback("✅ Tudo bem, obrigado!");
+            }
+            else if (comando.includes("status") || comando.includes("relé")) {
+                const statusTexto = releStatus ? "ligado" : "desligado";
+                mostrarFeedback(`Relé está ${statusTexto}`);
+            }
+            else {
+                // Comando não reconhecido
+                tocarAudio('Audio5.mp3');
+                mostrarFeedback("❓ Comando não reconhecido");
+            }
+        }
+        
+        // ========= REPRODUZIR ÁUDIO =========
+        function tocarAudio(nomeArquivo) {
+            // Verifica se é via ESP32 ou local
+            // Se estiver rodando no ESP32, usa a API
+            // Se estiver no computador local, tenta tocar diretamente
+            
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+                // Modo de teste local: cria um elemento de áudio
+                const audio = new Audio(nomeArquivo);
+                audio.play().catch(e => {
+                    console.error("Erro ao tocar local:", e);
+                    mostrarFeedback(`❌ Arquivo ${nomeArquivo} não encontrado`);
+                });
+                mostrarFeedback(`🔊 Tocando: ${nomeArquivo}`);
+                return;
+            }
+            
+            // Modo ESP32: chama a API
+            fetch(`${API_PLAY}?file=${nomeArquivo}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao reproduzir");
+                    mostrarFeedback(`🔊 Tocando: ${nomeArquivo}`);
+                })
+                .catch(error => {
+                    console.error("Erro:", error);
+                    mostrarFeedback(`❌ Erro ao tocar ${nomeArquivo}`);
+                });
+        }
+        
+        // ========= CONTROLE DO RELÉ =========
+        function controlarRele(acao) {
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+                // Modo simulação local
+                if (acao === 'ligar') {
+                    releStatus = true;
+                    document.getElementById('releStatus').innerHTML = "LIGADO";
+                    document.getElementById('releStatus').className = "status-badge ligado";
+                    mostrarFeedback("🔴 Relé LIGADO (simulação)");
+                } else {
+                    releStatus = false;
+                    document.getElementById('releStatus').innerHTML = "DESLIGADO";
+                    document.getElementById('releStatus').className = "status-badge desligado";
+                    mostrarFeedback("⚫ Relé DESLIGADO (simulação)");
+                }
+                return;
+            }
+            
+            // Modo ESP32 real
+            fetch(`${API_RELE}?estado=${acao}`)
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Resposta do relé:", data);
+                    atualizarStatusRele();
+                    mostrarFeedback(acao === 'ligar' ? "🔴 Relé ligado" : "⚫ Relé desligado");
+                })
+                .catch(error => {
+                    console.error("Erro no relé:", error);
+                    mostrarFeedback("❌ Erro ao controlar relé");
+                });
+        }
+        
+        function atualizarStatusRele() {
+            if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+                return; // Simulação
+            }
+            
+            fetch(`${API_RELE}?estado=status`)
+                .then(response => response.text())
+                .then(data => {
+                    const statusElement = document.getElementById('releStatus');
+                    const status = data.toLowerCase();
+                    releStatus = (status === 'ligado');
+                    statusElement.textContent = data.toUpperCase();
+                    statusElement.className = `status-badge ${status}`;
+                })
+                .catch(error => console.error("Erro ao obter status:", error));
+        }
+        
+        // ========= SEQUÊNCIA DE DEMONSTRAÇÃO =========
+        function executarSequencia() {
+            mostrarFeedback("🎭 Executando sequência completa...");
+            
+            // 1. Boas-vindas
+            tocarAudio('Audio1.mp3');
+            
+            // 2. Ligar relé e tocar "Luz ligada"
+            setTimeout(() => {
+                controlarRele('ligar');
+                setTimeout(() => tocarAudio('Audio3.mp3'), 300);
+            }, 2500);
+            
+            // 3. Desligar relé e tocar despedida
+            setTimeout(() => {
+                controlarRele('desligar');
+                setTimeout(() => tocarAudio('Audio6.mp3'), 300);
+            }, 7000);
+        }
+        
+        // ========= FEEDBACK VISUAL =========
+        function mostrarFeedback(mensagem) {
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.textContent = mensagem;
+            feedbackDiv.classList.add('show');
+            
+            setTimeout(() => {
+                feedbackDiv.classList.remove('show');
+            }, 2000);
+        }
+        
+        // ========= ATUALIZA STATUS A CADA 5 SEGUNDOS (se no ESP32) =========
+        if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+            setInterval(atualizarStatusRele, 5000);
+        }
+    </script>
+</body>
+</html>
