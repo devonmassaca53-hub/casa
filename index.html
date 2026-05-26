@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Casa Inteligente - Controle por Áudio e Serial</title>
+    <title>Casa Inteligente - Assistente Pessoal</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -22,14 +22,14 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 600px;
             width: 100%;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
             border-radius: 48px;
             padding: 24px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.15);
         }
 
         h1 {
@@ -46,7 +46,7 @@
         .sub {
             text-align: center;
             color: #94a3b8;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-bottom: 28px;
             border-bottom: 1px dashed #334155;
             padding-bottom: 16px;
@@ -74,17 +74,18 @@
         .audio-card:hover {
             border-color: #3b82f6;
             background: #1e293b;
+            transform: translateX(5px);
         }
 
         .audio-label {
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #e2e8f0;
             letter-spacing: 0.5px;
         }
 
         .audio-label small {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #60a5fa;
             margin-left: 8px;
         }
@@ -101,7 +102,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .play-btn:hover {
@@ -119,7 +120,7 @@
         }
 
         .esp-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #cbd5e1;
             display: flex;
@@ -156,7 +157,11 @@
 
         .led.on {
             background: #10b981;
-            box-shadow: 0 0 8px #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .led.off {
+            background: #ef4444;
         }
 
         .btn-group {
@@ -185,10 +190,13 @@
         .btn-conectar {
             background: #3b82f6;
         }
+        .btn-desconectar {
+            background: #64748b;
+        }
 
         .btn:hover {
             filter: brightness(0.9);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .log-box {
@@ -196,56 +204,70 @@
             border-radius: 24px;
             padding: 16px;
             margin-top: 20px;
-            max-height: 200px;
+            max-height: 180px;
             overflow-y: auto;
-            font-family: monospace;
-            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
             color: #7dd3fc;
         }
 
         .log-entry {
-            padding: 6px 0;
+            padding: 5px 0;
             border-bottom: 1px solid #1e293b;
         }
 
         footer {
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #475569;
             margin-top: 24px;
+        }
+
+        .badge {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🏠 Assistente <span style="color:#60a5fa;">Casa Inteligente</span></h1>
-    <div class="sub">🎧 Áudios personalizados + Controle por Web Serial</div>
+    <div class="sub">🎧 Controle por Áudio | 🔌 Controle Manual | 👏 Duas Palmas Iniciam</div>
+
+    <div style="text-align: center; margin-bottom: 15px;">
+        <span class="badge">🎤 6 Áudios Personalizados</span>
+    </div>
 
     <!-- Lista de 6 áudios -->
     <div class="audio-grid">
         <div class="audio-card">
-            <span class="audio-label">🎤 Áudio 1 <small>“Seja bem-vindo”</small></span>
-            <button class="play-btn" data-audio="Audio1.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Áudio 1 <small>“Seja bem-vindo, senhor”</small></span>
+            <button class="play-btn" data-audio="audio1.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎤 Áudio 2 <small>“Luz ligada”</small></span>
-            <button class="play-btn" data-audio="Audio2.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Áudio 2 <small>“Luz ligada, senhor”</small></span>
+            <button class="play-btn" data-audio="audio2.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎤 Áudio 3 <small>“Luz desligada”</small></span>
-            <button class="play-btn" data-audio="Audio3.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Áudio 3 <small>“Luz desligada, senhor”</small></span>
+            <button class="play-btn" data-audio="audio3.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎤 Áudio 4 <small>“Comando recebido”</small></span>
-            <button class="play-btn" data-audio="Audio4.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Áudio 4 <small>“Compreendi, senhor”</small></span>
+            <button class="play-btn" data-audio="audio4.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎤 Áudio 5 <small>“Não entendi”</small></span>
-            <button class="play-btn" data-audio="Audio5.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Áudio 5 <small>“Não entendi, senhor”</small></span>
+            <button class="play-btn" data-audio="audio5.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎤 Áudio 6 <small>“Ajuda / Comandos”</small></span>
-            <button class="play-btn" data-audio="Audio6.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Áudio 6 <small>“Até logo, senhor”</small></span>
+            <button class="play-btn" data-audio="audio6.mp3">▶ Tocar</button>
         </div>
     </div>
 
@@ -259,27 +281,28 @@
                 <div class="led" id="relayLed"></div>
                 <span id="relayText">Relé: DESCONHECIDO</span>
             </div>
-            <button id="btnStatus" class="btn">🔁 Solicitar status</button>
+            <button id="btnStatus" class="btn">🔄 Status</button>
         </div>
         <div class="btn-group">
-            <button id="btnLigar" class="btn btn-ligar">💡 LIGAR relé</button>
-            <button id="btnDesligar" class="btn btn-desligar">⛔ DESLIGAR relé</button>
-            <button id="btnConectar" class="btn btn-conectar">🔌 Conectar ESP32 (USB)</button>
+            <button id="btnLigar" class="btn btn-ligar">💡 LIGAR RELÉ</button>
+            <button id="btnDesligar" class="btn btn-desligar">⛔ DESLIGAR RELÉ</button>
+            <button id="btnConectar" class="btn btn-conectar">🔌 Conectar ESP32</button>
+            <button id="btnDesconectar" class="btn btn-desconectar" style="display:none;">🔌 Desconectar</button>
         </div>
         <div class="log-box" id="logArea">
-            <div class="log-entry">📟 Aguardando conexão...</div>
-            <div class="log-entry">🎧 Clique nos botões de áudio para testar os MP3</div>
+            <div class="log-entry">📟 Sistema pronto. Conecte o ESP32 via USB.</div>
+            <div class="log-entry">🎧 Clique nos botões para testar os áudios.</div>
+            <div class="log-entry">👏 No ESP32: duas palmas tocam Áudio 1 automaticamente.</div>
         </div>
     </div>
     <footer>
-        ⚡ Hospede os arquivos Audio1.mp3 até Audio6.mp3 na mesma pasta que este index.html<br>
-        🔄 Use GitHub Desktop + VS Code para sincronizar.
+        ⚡ Hospede os arquivos: audio1.mp3 | audio2.mp3 | audio3.mp3 | audio4.mp3 | audio5.mp3 | audio6.mp3<br>
+        📡 Use Web Serial (Chrome/Edge) para conectar ao ESP32
     </footer>
 </div>
 
 <script>
     // ==================== ÁUDIOS ====================
-    // Cria um objeto para controlar a reprodução (evita múltiplos sons simultâneos)
     let currentAudio = null;
 
     function playAudio(file) {
@@ -298,16 +321,14 @@
         };
     }
 
-    // Associar botões de áudio
     document.querySelectorAll('.play-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const audioFile = btn.getAttribute('data-audio');
             if (audioFile) playAudio(audioFile);
-            else addLog(`⚠️ Arquivo de áudio não definido`, 'warn');
         });
     });
 
-    // ==================== WEB SERIAL (ESP32) ====================
+    // ==================== WEB SERIAL ====================
     let port = null;
     let reader = null;
     let writer = null;
@@ -316,6 +337,8 @@
     const relayLed = document.getElementById('relayLed');
     const relayText = document.getElementById('relayText');
     const logArea = document.getElementById('logArea');
+    const btnConectar = document.getElementById('btnConectar');
+    const btnDesconectar = document.getElementById('btnDesconectar');
 
     function addLog(msg, type = 'info') {
         const div = document.createElement('div');
@@ -326,6 +349,7 @@
         else if (type === 'error') prefix = '❌';
         else if (type === 'audio') prefix = '🎧';
         else if (type === 'command') prefix = '⚡';
+        else if (type === 'relay') prefix = '🔌';
         div.innerHTML = `<span style="color:#64748b;">[${time}]</span> ${prefix} ${msg}`;
         logArea.appendChild(div);
         logArea.scrollTop = logArea.scrollHeight;
@@ -334,10 +358,10 @@
 
     function updateRelayUI(state) {
         if (state === true || state === 'ON' || state === 1 || state === 'LIGADO') {
-            relayLed.classList.add('on');
+            relayLed.className = 'led on';
             relayText.innerText = 'Relé: LIGADO ✅';
         } else if (state === false || state === 'OFF' || state === 0 || state === 'DESLIGADO') {
-            relayLed.classList.remove('on');
+            relayLed.className = 'led off';
             relayText.innerText = 'Relé: DESLIGADO ⭕';
         } else {
             relayText.innerText = `Relé: ${state}`;
@@ -346,7 +370,7 @@
 
     async function sendCommand(cmd) {
         if (!writer || !port?.readable) {
-            addLog('⚠️ ESP32 não conectado. Conecte via botão "Conectar ESP32"', 'error');
+            addLog('⚠️ ESP32 não conectado. Clique em "Conectar ESP32"', 'error');
             return false;
         }
         try {
@@ -354,7 +378,7 @@
             addLog(`📤 Enviado: ${cmd}`, 'command');
             return true;
         } catch (err) {
-            addLog(`❌ Falha ao enviar: ${err.message}`, 'error');
+            addLog(`❌ Erro ao enviar: ${err.message}`, 'error');
             await desconectar();
             return false;
         }
@@ -374,17 +398,13 @@
                     const msg = line.trim();
                     if (!msg) continue;
                     addLog(`${msg}`, 'info');
-                    // detectar estado do relé
-                    if (msg.includes("RELÉ LIGADO") || msg.includes("RELAY ON") || msg.includes("LIGADO")) {
+                    
+                    if (msg.includes("RELÉ LIGADO") || msg.includes("RELAY ON")) {
                         updateRelayUI(true);
-                    } else if (msg.includes("RELÉ DESLIGADO") || msg.includes("RELAY OFF") || msg.includes("DESLIGADO")) {
+                    } else if (msg.includes("RELÉ DESLIGADO") || msg.includes("RELAY OFF")) {
                         updateRelayUI(false);
                     } else if (msg.includes("DUAS PALMAS")) {
-                        addLog("👏👏 Palmas detectadas pelo sensor!", 'success');
-                    } else if (msg.includes("STATUS: RELAY=")) {
-                        // formato exemplo: STATUS: RELAY=ON
-                        if (msg.includes("RELAY=ON")) updateRelayUI(true);
-                        else if (msg.includes("RELAY=OFF")) updateRelayUI(false);
+                        addLog("👏👏 Palmas detectadas! Áudio 1 será reproduzido pelo ESP32", 'success');
                     }
                 }
             } catch (err) {
@@ -406,12 +426,16 @@
             addLog("🔍 Solicitando porta serial...");
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: 115200 });
-            addLog("✅ Conectado ao ESP32! Iniciando leitura...", 'success');
+            addLog("✅ Conectado ao ESP32!", 'success');
+            
             writer = port.writable.getWriter();
             reader = port.readable.getReader();
             keepReading = true;
-            lerDados(); // loop assíncrono
-            // envia um comando para verificar estado atual
+            lerDados();
+            
+            btnConectar.style.display = 'none';
+            btnDesconectar.style.display = 'inline-block';
+            
             setTimeout(() => sendCommand("STATUS"), 500);
         } catch (err) {
             addLog(`❌ Erro conexão: ${err.message}`, 'error');
@@ -436,7 +460,8 @@
             port = null;
         }
         addLog("🔌 Desconectado do ESP32", 'info');
-        updateRelayUI('DESCONECTADO');
+        btnConectar.style.display = 'inline-block';
+        btnDesconectar.style.display = 'none';
     }
 
     // Eventos dos botões
@@ -444,23 +469,19 @@
     document.getElementById('btnDesligar').addEventListener('click', () => sendCommand("DESLIGAR"));
     document.getElementById('btnStatus').addEventListener('click', () => sendCommand("STATUS"));
     document.getElementById('btnConectar').addEventListener('click', conectarESP32);
+    document.getElementById('btnDesconectar').addEventListener('click', desconectar);
 
-    // Ao fechar a página, desconectar (se possível)
     window.addEventListener('beforeunload', () => {
         if (port?.readable) desconectar();
     });
 
-    // Verificação inicial de suporte
     if (!navigator.serial) {
-        addLog("⚠️ Web Serial não disponível. Controle do ESP32 apenas via simulação.", 'warn');
-        document.getElementById('btnConectar').disabled = true;
-        document.getElementById('btnConectar').style.opacity = 0.5;
+        addLog("⚠️ Web Serial não disponível. Use Chrome, Edge ou Opera.", 'warn');
+        btnConectar.disabled = true;
+        btnConectar.style.opacity = 0.5;
     } else {
-        addLog("✅ Navegador com suporte a Web Serial. Conecte o ESP32 via USB.", 'success');
+        addLog("✅ Navegador compatível. Conecte o ESP32 via USB.", 'success');
     }
-
-    // Pequeno teste de áudio: notifica sobre ausência de arquivos (mas não impede)
-    console.log("Página carregada — aguardando arquivos Audio1.mp3 ... Audio6.mp3");
 </script>
 </body>
 </html>
