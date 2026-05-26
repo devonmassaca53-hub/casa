@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(10px);
@@ -110,6 +110,75 @@
             transform: scale(1.02);
         }
 
+        /* Seção do Microfone */
+        .mic-section {
+            background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
+            border-radius: 28px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #8b5cf6;
+            text-align: center;
+        }
+
+        .mic-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn-mic {
+            background: #8b5cf6;
+            border: none;
+            color: white;
+            padding: 18px 35px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-mic:hover {
+            background: #7c3aed;
+            transform: scale(1.02);
+        }
+
+        .btn-mic.listening {
+            background: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .comandos-voz {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .cmd-badge {
+            background: #334155;
+            padding: 5px 12px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            color: #cbd5e1;
+        }
+
         /* Seção de controle do ESP32 */
         .esp-section {
             background: #0f172a;
@@ -168,6 +237,7 @@
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
@@ -237,38 +307,60 @@
 <body>
 <div class="container">
     <h1>🏠 Assistente <span style="color:#60a5fa;">Casa Inteligente</span></h1>
-    <div class="sub">🎧 Controle por Áudio | 🔌 Controle Manual | 👏 Duas Palmas Iniciam</div>
+    <div class="sub">🎧 Controle por Áudio | 🎤 Comandos de Voz | 👏 Duas Palmas Iniciam</div>
 
     <div style="text-align: center; margin-bottom: 15px;">
-        <span class="badge">🎤 6 Áudios Personalizados</span>
+        <span class="badge">🎵 6 Áudios Personalizados</span>
     </div>
 
     <!-- Lista de 6 áudios -->
     <div class="audio-grid">
         <div class="audio-card">
-            <span class="audio-label">🎵 Áudio 1 <small>“Seja bem-vindo, senhor”</small></span>
-            <button class="play-btn" data-audio="audio1.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Audio1.mp3 <small>“Seja bem-vindo, senhor”</small></span>
+            <button class="play-btn" data-audio="Audio1.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎵 Áudio 2 <small>“Luz ligada, senhor”</small></span>
-            <button class="play-btn" data-audio="audio2.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Audio2.mp3 <small>“Luz ligada, senhor”</small></span>
+            <button class="play-btn" data-audio="Audio2.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎵 Áudio 3 <small>“Luz desligada, senhor”</small></span>
-            <button class="play-btn" data-audio="audio3.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Audio3.mp3 <small>“Luz desligada, senhor”</small></span>
+            <button class="play-btn" data-audio="Audio3.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎵 Áudio 4 <small>“Compreendi, senhor”</small></span>
-            <button class="play-btn" data-audio="audio4.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Audio4.mp3 <small>“Compreendi, senhor”</small></span>
+            <button class="play-btn" data-audio="Audio4.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎵 Áudio 5 <small>“Não entendi, senhor”</small></span>
-            <button class="play-btn" data-audio="audio5.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Audio5.mp3 <small>“Não entendi, senhor”</small></span>
+            <button class="play-btn" data-audio="Audio5.mp3">▶ Tocar</button>
         </div>
         <div class="audio-card">
-            <span class="audio-label">🎵 Áudio 6 <small>“Até logo, senhor”</small></span>
-            <button class="play-btn" data-audio="audio6.mp3">▶ Tocar</button>
+            <span class="audio-label">🎵 Audio6.mp3 <small>“Até logo, senhor”</small></span>
+            <button class="play-btn" data-audio="Audio6.mp3">▶ Tocar</button>
         </div>
+    </div>
+
+    <!-- Seção de Comandos de Voz (Microfone) -->
+    <div class="mic-section">
+        <div class="mic-title">
+            🎤 <span>Comandos de Voz</span>
+        </div>
+        <button id="btnMicrofone" class="btn-mic">
+            🎙️ Clique e Fale seu comando
+        </button>
+        <div class="comandos-voz">
+            <span class="cmd-badge">"ligar luz"</span>
+            <span class="cmd-badge">"acender luz"</span>
+            <span class="cmd-badge">"desligar luz"</span>
+            <span class="cmd-badge">"apagar luz"</span>
+            <span class="cmd-badge">"tchau"</span>
+            <span class="cmd-badge">"bem-vindo"</span>
+            <span class="cmd-badge">"ajuda"</span>
+        </div>
+        <p style="color: #94a3b8; font-size: 0.7rem; margin-top: 12px;">
+            ⚡ Funciona no Chrome, Edge ou Opera. Clique no microfone e fale!
+        </p>
     </div>
 
     <!-- Controle do ESP32 (Web Serial) -->
@@ -292,11 +384,12 @@
         <div class="log-box" id="logArea">
             <div class="log-entry">📟 Sistema pronto. Conecte o ESP32 via USB.</div>
             <div class="log-entry">🎧 Clique nos botões para testar os áudios.</div>
-            <div class="log-entry">👏 No ESP32: duas palmas tocam Áudio 1 automaticamente.</div>
+            <div class="log-entry">🎤 Clique no microfone e fale um comando!</div>
+            <div class="log-entry">👏 No ESP32: duas palmas tocam Audio1.mp3 automaticamente.</div>
         </div>
     </div>
     <footer>
-        ⚡ Hospede os arquivos: audio1.mp3 | audio2.mp3 | audio3.mp3 | audio4.mp3 | audio5.mp3 | audio6.mp3<br>
+        ⚡ Hospede os arquivos: Audio1.mp3 | Audio2.mp3 | Audio3.mp3 | Audio4.mp3 | Audio5.mp3 | Audio6.mp3<br>
         📡 Use Web Serial (Chrome/Edge) para conectar ao ESP32
     </footer>
 </div>
@@ -350,6 +443,7 @@
         else if (type === 'audio') prefix = '🎧';
         else if (type === 'command') prefix = '⚡';
         else if (type === 'relay') prefix = '🔌';
+        else if (type === 'mic') prefix = '🎤';
         div.innerHTML = `<span style="color:#64748b;">[${time}]</span> ${prefix} ${msg}`;
         logArea.appendChild(div);
         logArea.scrollTop = logArea.scrollHeight;
@@ -376,6 +470,20 @@
         try {
             await writer.write(cmd + '\n');
             addLog(`📤 Enviado: ${cmd}`, 'command');
+            
+            // Se o comando for LIGAR ou DESLIGAR, toca o áudio correspondente no navegador também
+            if (cmd === "LIGAR") {
+                playAudio("Audio2.mp3");
+            } else if (cmd === "DESLIGAR") {
+                playAudio("Audio3.mp3");
+            } else if (cmd === "AUDIO1") {
+                playAudio("Audio1.mp3");
+            } else if (cmd === "AUDIO5") {
+                playAudio("Audio5.mp3");
+            } else if (cmd === "AUDIO6") {
+                playAudio("Audio6.mp3");
+            }
+            
             return true;
         } catch (err) {
             addLog(`❌ Erro ao enviar: ${err.message}`, 'error');
@@ -404,7 +512,7 @@
                     } else if (msg.includes("RELÉ DESLIGADO") || msg.includes("RELAY OFF")) {
                         updateRelayUI(false);
                     } else if (msg.includes("DUAS PALMAS")) {
-                        addLog("👏👏 Palmas detectadas! Áudio 1 será reproduzido pelo ESP32", 'success');
+                        addLog("👏👏 Palmas detectadas! Audio1.mp3 será reproduzido pelo ESP32", 'success');
                     }
                 }
             } catch (err) {
@@ -464,6 +572,85 @@
         btnDesconectar.style.display = 'none';
     }
 
+    // ==================== RECONHECIMENTO DE VOZ (MICROFONE) ====================
+    const btnMicrofone = document.getElementById('btnMicrofone');
+    let reconhecimento = null;
+    
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        reconhecimento = new SpeechRecognition();
+        reconhecimento.lang = 'pt-BR';
+        reconhecimento.continuous = false;
+        reconhecimento.interimResults = false;
+        
+        reconhecimento.onstart = function() {
+            btnMicrofone.classList.add('listening');
+            btnMicrofone.innerHTML = '🎙️ Ouvindo... Fale agora!';
+            addLog("🎤 Microfone ativado. Fale seu comando...", 'mic');
+        };
+        
+        reconhecimento.onend = function() {
+            btnMicrofone.classList.remove('listening');
+            btnMicrofone.innerHTML = '🎙️ Clique e Fale seu comando';
+        };
+        
+        reconhecimento.onerror = function(event) {
+            btnMicrofone.classList.remove('listening');
+            btnMicrofone.innerHTML = '🎙️ Clique e Fale seu comando';
+            addLog(`❌ Erro no microfone: ${event.error}`, 'error');
+        };
+        
+        reconhecimento.onresult = function(event) {
+            const comando = event.results[0][0].transcript.toLowerCase().trim();
+            addLog(`🎤 Você disse: "${comando}"`, 'mic');
+            
+            // Processa o comando de voz
+            if (comando.includes('ligar') || comando.includes('acender') || comando.includes('luz on') || comando.includes('liga a luz')) {
+                addLog(`✅ Comando reconhecido: LIGAR LUZ`, 'success');
+                sendCommand("LIGAR");
+                playAudio("Audio4.mp3"); // "Compreendi, senhor"
+            }
+            else if (comando.includes('desligar') || comando.includes('apagar') || comando.includes('luz off') || comando.includes('desliga a luz')) {
+                addLog(`✅ Comando reconhecido: DESLIGAR LUZ`, 'success');
+                sendCommand("DESLIGAR");
+                playAudio("Audio4.mp3"); // "Compreendi, senhor"
+            }
+            else if (comando.includes('tchau') || comando.includes('sair') || comando.includes('até logo') || comando.includes('encerrar')) {
+                addLog(`✅ Comando reconhecido: SAIR`, 'success');
+                sendCommand("AUDIO6");
+                playAudio("Audio6.mp3"); // "Até logo, senhor"
+            }
+            else if (comando.includes('bem-vindo') || comando.includes('olá') || comando.includes('oi') || comando.includes('iniciar')) {
+                addLog(`✅ Comando reconhecido: BEM-VINDO`, 'success');
+                sendCommand("AUDIO1");
+                playAudio("Audio1.mp3"); // "Seja bem-vindo, senhor"
+            }
+            else if (comando.includes('ajuda') || comando.includes('comandos') || comando.includes('o que você faz')) {
+                addLog(`📢 Comandos disponíveis: "ligar luz", "desligar luz", "tchau", "bem-vindo"`, 'mic');
+                playAudio("Audio4.mp3");
+            }
+            else {
+                addLog(`❌ Comando não reconhecido: "${comando}"`, 'error');
+                playAudio("Audio5.mp3"); // "Não entendi, senhor"
+            }
+        };
+        
+        btnMicrofone.onclick = () => {
+            if (reconhecimento) {
+                try {
+                    reconhecimento.start();
+                } catch(e) {
+                    addLog("⚠️ Aguarde um momento antes de tentar novamente.", 'error');
+                }
+            }
+        };
+    } else {
+        btnMicrofone.disabled = true;
+        btnMicrofone.style.opacity = '0.5';
+        btnMicrofone.innerHTML = '🎙️ Voz não suportada (use Chrome)';
+        addLog("⚠️ Seu navegador não suporta reconhecimento de voz. Use Chrome, Edge ou Opera.", 'error');
+    }
+
     // Eventos dos botões
     document.getElementById('btnLigar').addEventListener('click', () => sendCommand("LIGAR"));
     document.getElementById('btnDesligar').addEventListener('click', () => sendCommand("DESLIGAR"));
@@ -476,11 +663,11 @@
     });
 
     if (!navigator.serial) {
-        addLog("⚠️ Web Serial não disponível. Use Chrome, Edge ou Opera.", 'warn');
+        addLog("⚠️ Web Serial não disponível. Use Chrome, Edge ou Opera para controlar o ESP32.", 'warn');
         btnConectar.disabled = true;
         btnConectar.style.opacity = 0.5;
     } else {
-        addLog("✅ Navegador compatível. Conecte o ESP32 via USB.", 'success');
+        addLog("✅ Navegador compatível. Conecte o ESP32 via USB e clique em Conectar.", 'success');
     }
 </script>
 </body>
